@@ -33,3 +33,12 @@ input[type='checkbox'] {
     display: none;
 }
 
+.checkbox {
+    display: flex;
+    justify-content: center;
+    border: 1px dashed;
+}
+
+.read, .unread {
+    cursor: pointer;
+}

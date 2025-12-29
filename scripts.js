@@ -17,23 +17,37 @@ function Book(title, author, id, pages, read) {
     this.id = id;
 }
 
+Book.prototype.readToggle = function() {
+    const readCheck = document.createElement('div');
+    readCheck.innerHTML = this.read? '&#9989' : '&#10060';
+    readCheck.className = this.read? 'read' : 'unread';
+    readCheck.addEventListener('click', () => {
+        this.read = !this.read;
+        renderTable();
+    });
+
+    return readCheck;
+}
+
 let renderTable = () => {
     table.innerHTML = `<table id="library-table"><tr><th>Title</th><th>Author</th><th>Pages</th><th>Read</th><th>Delete</th></tr></table>`;
     myLibrary.forEach((book) => {
         const tableRow = document.createElement('tr');
-        const cell = document.createElement('td');
+        const readCell = document.createElement('td');
+        readCell.appendChild(book.readToggle());
+        const deleteCell = document.createElement('td');
         const deleteButton = document.createElement('button');
-        deleteButton.innerHTML = 'button';
+        deleteButton.innerHTML = 'Delete';
         deleteButton.setAttribute('value', book.id);
-        deleteButton.addEventListener('click', e => {
+        deleteButton.addEventListener('click', () => {
             removeFromLibrary(deleteButton.value)
         });
         tableRow.innerHTML = `<td>${book.title}</td>
             <td>${book.author}</td>
-            <td>${book.pages}</td>
-            <td class='checkbox' ><input type="checkbox"${book.read ? "checked" : ""}></td>`;
-        tableRow.appendChild(cell);
-        cell.appendChild(deleteButton)
+            <td>${book.pages}</td>`;
+        tableRow.appendChild(readCell);
+        tableRow.appendChild(deleteCell);
+        deleteCell.appendChild(deleteButton)
         table.appendChild(tableRow);
     });
     console.log(myLibrary);
@@ -50,7 +64,7 @@ let removeFromLibrary = (id) => {
     renderTable();
 }
 
-newButton.addEventListener("click", e => {
+newButton.addEventListener("click", () => {
     form.style.display = 'block';
     newButton.style.display = 'none';
 });
